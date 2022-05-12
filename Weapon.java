@@ -5,12 +5,15 @@
  * 
  * 
  */
+import java.util.Random;
+
 public class Weapon {
-    private int diceType;
-    private int diceNum;
-    private String name;
-    private int accuracy;
-    private String type;
+    int diceType;
+    int diceNum;
+    String name;
+    int accuracy;
+    String type;
+    Random randgen = new Random();
 
     public String getType(){
         return this.type;

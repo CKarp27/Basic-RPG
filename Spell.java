@@ -8,12 +8,12 @@
 import java.util.Random;
 
 public class Spell {
-    private String name;
-    private String type;
-    private int diceNum; //(6 for d6, 8 for d8 etc.)
-    private int diceType;
-    private int accuracy;
-    public Random randgen = new Random();
+    String name;
+    String type;
+    int diceNum; //(6 for d6, 8 for d8 etc.)
+    int diceType;
+    int accuracy;
+    Random randgen = new Random();
 
     public Spell(String name, String type, int diceNum, int diceType, int accuracy){ //Constructor
         this.name = name;
@@ -102,7 +102,6 @@ public class Spell {
 
     public static void main(String[] args) {
         Spell fireball = new Spell("Fireball" , "Water", 1 , 8, 1000);
-        int sum = 0;
         for (int i = 0; i<10; i++){
             System.out.println(fireball.attack(1000, "Fire"));
         }
