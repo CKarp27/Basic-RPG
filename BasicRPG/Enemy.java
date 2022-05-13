@@ -5,13 +5,14 @@
  * 
  */
 package BasicRPG;
-import BasicRPG.Spell.SpellTypes;
+import BasicRPG.Spell.SpellType;
+import BasicRPG.Weapon.MeleeType;
 
 public class Enemy extends Entity {
-    SpellTypes spellTypeWeakness;
-    private String weaponTypeWeakness;
+    SpellType spellTypeWeakness;
+    MeleeType weaponTypeWeakness;
 
-    public Enemy(String name, SpellTypes spelltype, String weapontype, int health, int action_speed, Weapon weapon, Spell spell){
+    public Enemy(String name, SpellType spelltype, MeleeType weapontype, int health, int action_speed, Weapon weapon, Spell spell){
         this.name = name;
         this.spellTypeWeakness = spelltype;
         this.weaponTypeWeakness = weapontype;
@@ -23,12 +24,15 @@ public class Enemy extends Entity {
 
     //GETTERS
 
-    public String getSpellTypeWeakness(){
+    public SpellType getSpellTypeWeakness(){
         return this.spellTypeWeakness;
     }
 
-    public String getWeaponTypeWeakness(){
+    public MeleeType getWeaponTypeWeakness(){
         return this.weaponTypeWeakness;
     }
 
+    public String toString(){
+        return (this.getName() + ": \n" + "Max Health: " + this.getMaxHealth() + "\nWeapon: " + this.getEquippedWeapon().toString() + "\nSpell: " + this.getEquippedSpell().toString());
+    }
 }

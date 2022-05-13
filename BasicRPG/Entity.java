@@ -1,8 +1,6 @@
 package BasicRPG;
 
-import Weapon;
-
-public class Entity {
+abstract class Entity {
     String name;
     Weapon equipped_weapon;
     Spell equipped_spell;

@@ -5,18 +5,37 @@
  * 
  * 
  */
-import java.util.Random;
 package BasicRPG;
+ import java.util.Random;
+
 
 public class Weapon {
     int diceType;
     int diceNum;
     String name;
     int accuracy;
-    String type;
+    enum MeleeType{
+        BLUNT,
+        STAB,
+        SLASH;
+
+        public static MeleeType getRandomType(){
+            Random rand = new Random();
+            return values()[rand.nextInt(values().length)];
+        }
+    }
+    MeleeType type;
     public Random randgen = new Random();
 
-    public String getType(){
+    public Weapon(String name, int diceType, int diceNum, int accuracy, MeleeType type){
+        this.name = name;
+        this.diceType = diceType;
+        this.diceNum = diceNum;
+        this.accuracy = accuracy;
+        this.type = type;
+    }
+
+    public MeleeType getType(){
         return this.type;
     }
 
@@ -36,6 +55,10 @@ public class Weapon {
         return this.name;
     }
     
+    public String toString(){
+        return (this.getName() + " , uses " + this.getDiceNum() + "d" + this.getDiceType() +"(s) with type " + this.getType() + " and an accuracy of " + this.getAccuracy());
+    }
+   
     public int rollDMG(){
         int sum = 0;
         for (int i=0; i<diceNum; i++){
@@ -72,9 +95,9 @@ public class Weapon {
         return hit;
     }
 
-    public int attack(int enemyDef, String enemyWeakness){                    //return dmg done
+    public int attack(int enemyDef, MeleeType enemyWeakness){                    //return dmg done
         int mod = 1;                                                          //type dmg modifier
-        if (this.getType().equalsIgnoreCase(enemyWeakness)){                  //check weakness
+        if (this.getType()==enemyWeakness){                  //check weakness
             mod = 2;
         }
 

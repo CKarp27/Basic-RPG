@@ -10,19 +10,25 @@ import java.util.Random;
 
 public class Spell {
     String name;
-    enum SpellTypes{
+    Random randgen = new Random();
+    enum SpellType{
         FIRE,
         WATER,
         GROUND,
-        AIR
+        AIR;
+
+        public static SpellType getRandomType(){
+            Random rand = new Random();
+            return values()[rand.nextInt(values().length)];
+        }
     }
-    SpellTypes type;
+    SpellType type;
     int diceNum; //(6 for d6, 8 for d8 etc.)
     int diceType;
     int accuracy;
-    Random randgen = new Random();
+    
 
-    public Spell(String name, SpellTypes type, int diceNum, int diceType, int accuracy){ //Constructor
+    public Spell(String name, int diceType, int diceNum, int accuracy, SpellType type){ //Constructor
         this.name = name;
         this.type = type;
         this.diceNum = diceNum;
@@ -30,11 +36,7 @@ public class Spell {
         this.accuracy = accuracy;
     }
 
-    // public String getType(){
-    //     return this.type;
-    // }
-
-    public SpellTypes getType(){
+    public SpellType getType(){
         return this.type;
     }
 
@@ -52,6 +54,10 @@ public class Spell {
 
     public String getName(){
         return this.name;
+    }
+    
+    public String toString(){
+        return (this.getName() + " , uses " + this.getDiceNum() + "d" + this.getDiceType() +"(s) with type " + this.getType() + " and an accuracy of " + this.getAccuracy());
     }
     
     public int rollDMG(){
@@ -97,7 +103,7 @@ public class Spell {
         return hit;
     }
 
-    public int attack(int enemyDef, SpellTypes enemyWeakness){                    //return dmg done
+    public int attack(int enemyDef, SpellType enemyWeakness){                    //return dmg done
         int mod = 1;                                                          //type dmg modifier
         if (this.getType()==enemyWeakness) {                                //check weakness
             mod = 2;
@@ -111,11 +117,11 @@ public class Spell {
         return dmg;
     }
 
-    public static void main(String[] args) {
-        Spell fireball = new Spell("Fireball" , SpellTypes.WATER, 1 , 8, 1000);
-        for (int i = 0; i<10; i++){
-            System.out.println(fireball.attack(1000, SpellTypes.WATER));
-        }
+    // public static void main(String[] args) {
+    //     Spell fireball = new Spell("Fireball" , SpellType.WATER, 1 , 8, 1000);
+    //     for (int i = 0; i<10; i++){
+    //         System.out.println(fireball.attack(1000, SpellType.WATER));
+    //     }
         
-    }
+    // }
 }

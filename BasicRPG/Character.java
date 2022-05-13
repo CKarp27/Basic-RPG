@@ -6,14 +6,15 @@
  * 
  */
 
-import java.util.ArrayList;
 package BasicRPG;
+import java.util.ArrayList;
+
 
 public class Character extends Entity {
     private int lvl;
     private ArrayList<Spell> known_spells;
     private ArrayList<Weapon> arsenal;
-    private ArrayList<Item> backpack;
+    //private ArrayList<Item> backpack;
 
     public int getLVL(){
         return this.lvl;
