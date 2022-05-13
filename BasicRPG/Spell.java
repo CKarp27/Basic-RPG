@@ -1,21 +1,40 @@
 /**
- * Defines a weapon for an RPG
+ * Defines a spell for an RPG
  * @author Connor Karpinski
  * @version 1.0
  * 
  * 
  */
+package BasicRPG;
 import java.util.Random;
 
-public class Weapon {
-    int diceType;
-    int diceNum;
+public class Spell {
     String name;
+    enum SpellTypes{
+        FIRE,
+        WATER,
+        GROUND,
+        AIR
+    }
+    SpellTypes type;
+    int diceNum; //(6 for d6, 8 for d8 etc.)
+    int diceType;
     int accuracy;
-    String type;
     Random randgen = new Random();
 
-    public String getType(){
+    public Spell(String name, SpellTypes type, int diceNum, int diceType, int accuracy){ //Constructor
+        this.name = name;
+        this.type = type;
+        this.diceNum = diceNum;
+        this.diceType = diceType;
+        this.accuracy = accuracy;
+    }
+
+    // public String getType(){
+    //     return this.type;
+    // }
+
+    public SpellTypes getType(){
         return this.type;
     }
 
@@ -37,18 +56,25 @@ public class Weapon {
     
     public int rollDMG(){
         int sum = 0;
-        for (int i=0; i<diceNum; i++){
+        for (int i=0; i<this.getDiceNum(); i++){
             sum += 1+randgen.nextInt(diceType);
         }
         return sum;
     }
 
-    public int rollDMG(int buff){
-        int sum = 0;
-        for (int i=0; i<this.getDiceNum(); i++){
-            sum += 1+randgen.nextInt(diceType);
-        }
-        return sum+buff;
+    public void buffSpell(int buffLVL){
+        diceNum += buffLVL;
+    }
+
+    public void debuffSpell(int debuffLVL){
+        diceNum -= debuffLVL;
+    }
+
+    public int rollDMG(int buffLVL){                    // buff the spell then roll damage then debuff
+        buffSpell(buffLVL);
+        int sum = this.rollDMG();
+        debuffSpell(buffLVL);
+        return sum;
     }
 
     public int calcHitProb(int enemyDef){                // need this to show to player
@@ -56,7 +82,7 @@ public class Weapon {
         int prob_thresh = (int) Math.floor((double)this.getAccuracy()/total*100);                    // calculate hit threshold for roll
         return prob_thresh;
     }
-   
+    
     public int rollHit(int enemyDef){
         int hit = 0;                                                                      // 0 for miss, 1 for hit, 2 for crit         
         int prob_thresh = this.calcHitProb(enemyDef);                                      // divide your acc by total to calculate prob
@@ -71,9 +97,9 @@ public class Weapon {
         return hit;
     }
 
-    public int attack(int enemyDef, String enemyWeakness){                    //return dmg done
+    public int attack(int enemyDef, SpellTypes enemyWeakness){                    //return dmg done
         int mod = 1;                                                          //type dmg modifier
-        if (this.getType().equalsIgnoreCase(enemyWeakness)){                  //check weakness
+        if (this.getType()==enemyWeakness) {                                //check weakness
             mod = 2;
         }
 
@@ -85,4 +111,11 @@ public class Weapon {
         return dmg;
     }
 
+    public static void main(String[] args) {
+        Spell fireball = new Spell("Fireball" , SpellTypes.WATER, 1 , 8, 1000);
+        for (int i = 0; i<10; i++){
+            System.out.println(fireball.attack(1000, SpellTypes.WATER));
+        }
+        
+    }
 }

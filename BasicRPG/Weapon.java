@@ -1,27 +1,20 @@
 /**
- * Defines a spell for an RPG
+ * Defines a weapon for an RPG
  * @author Connor Karpinski
  * @version 1.0
  * 
  * 
  */
 import java.util.Random;
+package BasicRPG;
 
-public class Spell {
-    String name;
-    String type;
-    int diceNum; //(6 for d6, 8 for d8 etc.)
+public class Weapon {
     int diceType;
+    int diceNum;
+    String name;
     int accuracy;
-    Random randgen = new Random();
-
-    public Spell(String name, String type, int diceNum, int diceType, int accuracy){ //Constructor
-        this.name = name;
-        this.type = type;
-        this.diceNum = diceNum;
-        this.diceType = diceType;
-        this.accuracy = accuracy;
-    }
+    String type;
+    public Random randgen = new Random();
 
     public String getType(){
         return this.type;
@@ -45,25 +38,18 @@ public class Spell {
     
     public int rollDMG(){
         int sum = 0;
-        for (int i=0; i<this.getDiceNum(); i++){
+        for (int i=0; i<diceNum; i++){
             sum += 1+randgen.nextInt(diceType);
         }
         return sum;
     }
 
-    public void buffSpell(int buffLVL){
-        diceNum += buffLVL;
-    }
-
-    public void debuffSpell(int debuffLVL){
-        diceNum -= debuffLVL;
-    }
-
-    public int rollDMG(int buffLVL){                    // buff the spell then roll damage then debuff
-        buffSpell(buffLVL);
-        int sum = this.rollDMG();
-        debuffSpell(buffLVL);
-        return sum;
+    public int rollDMG(int buff){
+        int sum = 0;
+        for (int i=0; i<this.getDiceNum(); i++){
+            sum += 1+randgen.nextInt(diceType);
+        }
+        return sum+buff;
     }
 
     public int calcHitProb(int enemyDef){                // need this to show to player
@@ -71,7 +57,7 @@ public class Spell {
         int prob_thresh = (int) Math.floor((double)this.getAccuracy()/total*100);                    // calculate hit threshold for roll
         return prob_thresh;
     }
-    
+   
     public int rollHit(int enemyDef){
         int hit = 0;                                                                      // 0 for miss, 1 for hit, 2 for crit         
         int prob_thresh = this.calcHitProb(enemyDef);                                      // divide your acc by total to calculate prob
@@ -100,11 +86,4 @@ public class Spell {
         return dmg;
     }
 
-    public static void main(String[] args) {
-        Spell fireball = new Spell("Fireball" , "Water", 1 , 8, 1000);
-        for (int i = 0; i<10; i++){
-            System.out.println(fireball.attack(1000, "Fire"));
-        }
-        
-    }
 }

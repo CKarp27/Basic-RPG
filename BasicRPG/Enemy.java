@@ -4,13 +4,14 @@
  * @version 1.0
  * 
  */
-
+package BasicRPG;
+import BasicRPG.Spell.SpellTypes;
 
 public class Enemy extends Entity {
-    private String spellTypeWeakness;
+    SpellTypes spellTypeWeakness;
     private String weaponTypeWeakness;
 
-    public Enemy(String name, String spelltype, String weapontype, int health, int action_speed, Weapon weapon, Spell spell){
+    public Enemy(String name, SpellTypes spelltype, String weapontype, int health, int action_speed, Weapon weapon, Spell spell){
         this.name = name;
         this.spellTypeWeakness = spelltype;
         this.weaponTypeWeakness = weapontype;

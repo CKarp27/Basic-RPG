@@ -1,3 +1,7 @@
+package BasicRPG;
+
+import Weapon;
+
 public class Entity {
     String name;
     Weapon equipped_weapon;
@@ -68,5 +72,5 @@ public class Entity {
         }
     }
 
-    
+
 }

@@ -6,7 +6,8 @@
  * 
  */
 
- import java.util.ArrayList;
+import java.util.ArrayList;
+package BasicRPG;
 
 public class Character extends Entity {
     private int lvl;
