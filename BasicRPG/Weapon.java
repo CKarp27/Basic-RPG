@@ -95,6 +95,7 @@ public class Weapon {
         return hit;
     }
 
+    //player attack
     public int attack(int enemyDef, MeleeType enemyWeakness){                    //return dmg done
         int mod = 1;                                                          //type dmg modifier
         if (this.getType()==enemyWeakness){                  //check weakness
@@ -109,4 +110,13 @@ public class Weapon {
         return dmg;
     }
 
+    //enemy attack
+    public int attack(int playerDef){                    //return dmg done
+        int hit = this.rollHit(playerDef);
+        int dmg = this.rollDMG()*hit;
+        if (hit == 2){
+            dmg = hit*this.getDiceNum()*this.getDiceType();
+        }
+        return dmg;
+    }
 }

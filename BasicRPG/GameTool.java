@@ -9,9 +9,11 @@ package BasicRPG;
 import BasicRPG.Spell.SpellType;
 import BasicRPG.Weapon.MeleeType;
 import java.util.Random;
+import java.util.Scanner;
 
 public final class GameTool {
     static Random randgen = new Random();
+    static Scanner kb = new Scanner(System.in);
     final static String[] enemy_names = {"Bugbear","Orc","Goblin"};
     final static String[] weapon_names = {"Axe","Spear","Sword","Dagger","Hammer","Greatsword"};         // change to 2d array with catagories by weapon type, same for spells
     final static String[] spell_names = {"Fireball", "Lightning Strike", "Hail", "Magic Missile"};
@@ -47,8 +49,33 @@ public final class GameTool {
         String name = enemy_names[randgen.nextInt(enemy_names.length)];
         int action_speed = 1;                                                   // change later if more speeds wanted
         int health = 20 + randgen.nextInt(50);
+        int mana = 20 + randgen.nextInt(50);
         Weapon wep = GameTool.createWeapon();
         Spell spell = GameTool.createSpell();
-        return new Enemy(name, SpellWeakness, MeleeWeakness, health, action_speed, wep, spell);
+        int defense = 500 + randgen.nextInt(500);
+        return new Enemy(name, wep, spell, mana, health, action_speed, SpellWeakness, MeleeWeakness, defense);
+    }
+
+    public static void Battle(Character player, Enemy enemy){
+        playerTurn(player,enemy);
+        enemyTurn(player,enemy);
+    }
+
+    public static void playerTurn(Character player, Enemy enemy){
+        System.out.println("What would you like to do for your turn action? Type the number of the action");
+        System.out.println("1 - Attack with current weapon " + player.getEquippedWeapon().toString());
+        System.out.println("2 - Cast current spell " + player.getEquippedSpell().toString());
+        System.out.println("3 - Use an item ");
+        System.out.println("4 - Change Current Weapon (Does not cost turn action)");
+        System.out.println("5 - Change Current Spell (Does not cost turn action)");
+
+        int choice = kb.nextInt();
+        switch (choice){
+            case 1: player.attack(enemy);
+            case 2: player.castSpell(enemy);
+            //case 3: player.useItem()
+            case 4: player.swapWeapon();
+            case 5: player.swapSpell();
+        }
     }
 }

@@ -103,7 +103,8 @@ public class Spell {
         return hit;
     }
 
-    public int attack(int enemyDef, SpellType enemyWeakness){                    //return dmg done
+    //player cast spell
+    public int castSpell(int enemyDef, SpellType enemyWeakness){                    //return dmg done
         int mod = 1;                                                          //type dmg modifier
         if (this.getType()==enemyWeakness) {                                //check weakness
             mod = 2;
@@ -113,6 +114,16 @@ public class Spell {
         int dmg = this.rollDMG()*hit*mod;
         if (hit == 2){
             dmg = mod*hit*this.getDiceNum()*this.getDiceType();
+        }
+        return dmg;
+    }
+
+    //enemy cast spell
+    public int castSpell(int playerDef){                    //return dmg done
+        int hit = this.rollHit(playerDef);
+        int dmg = this.rollDMG()*hit;
+        if (hit == 2){
+            dmg = hit*this.getDiceNum()*this.getDiceType();
         }
         return dmg;
     }
