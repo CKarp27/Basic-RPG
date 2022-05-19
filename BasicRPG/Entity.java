@@ -12,15 +12,14 @@ public abstract class Entity {
     protected boolean alive;
     protected int defense;
 
-    public Entity(String name, Weapon equipped_weapon, Spell equipped_spell, int max_mana, int max_health, int action_speed){
+    public Entity(String name, int max_mana, int max_health, int action_speed, int defense){
         this.name = name;
-        this.equipped_weapon = equipped_weapon;
-        this.equipped_spell = equipped_spell;
         this.max_mana = max_mana;
         this.max_health = max_health;
         this.current_health = max_health;
         this.current_mana = max_mana;
         this.action_speed = action_speed;
+        this.defense = defense;
         this.alive = true;
     }
 
@@ -121,6 +120,7 @@ public abstract class Entity {
 
     public void killEntity(){
         this.alive = false;
+        System.out.printf("\n%s has been slain\n",this.getName());
     }
 
 }

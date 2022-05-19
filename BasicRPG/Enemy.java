@@ -13,10 +13,11 @@ public class Enemy extends Entity {
     MeleeType weaponTypeWeakness;
 
     public Enemy(String name, Weapon equipped_weapon, Spell equipped_spell, int max_mana, int max_health, int action_speed, SpellType spelltype, MeleeType weapontype, int defense){
-        super(name, equipped_weapon, equipped_spell, max_mana, max_health, action_speed);
+        super(name, max_mana, max_health, action_speed, defense);
+        this.equipped_weapon = equipped_weapon;
+        this.equipped_spell = equipped_spell;
         this.spellTypeWeakness = spelltype;
         this.weaponTypeWeakness = weapontype;
-        this.defense = defense;
     }
 
     //GETTERS
@@ -29,15 +30,25 @@ public class Enemy extends Entity {
         return this.weaponTypeWeakness;
     }
 
+    public void showWeakness(){
+        System.out.println("\nMelee weakness : "+this.getWeaponTypeWeakness());
+        System.out.println("Spell weakness : "+this.getSpellTypeWeakness());
+        System.out.println("Defense : " + this.getDefense());
+    }
+
     public void attack(Character target){
-        target.takeDMG(this.getEquippedWeapon().attack(target.getDefense()));
+        int DMG = this.getEquippedWeapon().attack(target.getDefense());
+        System.out.printf("\n%s dealt %d damage with %s!\n\n", this.getName(), DMG, this.getEquippedWeapon().getName());
+        target.takeDMG(DMG);
     }
 
     public void castSpell(Character target){
-        target.takeDMG(this.getEquippedSpell().castSpell(target.getDefense()));
+        int DMG = this.getEquippedSpell().castSpell(target.getDefense());
+        System.out.printf("\n%s dealt %d damage with %s!\n\n", this.getName(), DMG, this.getEquippedSpell().getName());
+        target.takeDMG(DMG);
     }
 
     public String toString(){
-        return (this.getName() + ": \n" + "Max Health: " + this.getMaxHealth() + "\nWeapon: " + this.getEquippedWeapon().toString() + "\nSpell: " + this.getEquippedSpell().toString());
+        return (this.getName() + ": \n" + "Max Health: " + this.getHealth()+"/"+this.getMaxHealth() + "\nWeapon: " + this.getEquippedWeapon().toString() + "\nSpell: " + this.getEquippedSpell().toString()+"\n");
     }
 }

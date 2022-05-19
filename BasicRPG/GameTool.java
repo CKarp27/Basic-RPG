@@ -27,7 +27,7 @@ public final class GameTool {
         }
         String name = weapon_names[randgen.nextInt(weapon_names.length)];
         MeleeType type = MeleeType.getRandomType();
-        int accuracy = 800 + randgen.nextInt(401); // range 800 - 1200
+        int accuracy = 400 + randgen.nextInt(401); // range 800 - 1200
         return new Weapon(name, dtype, dnum, accuracy, type);
     }
 
@@ -39,7 +39,7 @@ public final class GameTool {
         }
         String name = spell_names[randgen.nextInt(spell_names.length)];
         SpellType type = SpellType.getRandomType();
-        int accuracy = 800 + randgen.nextInt(401); // range 800 - 1200
+        int accuracy = 400 + randgen.nextInt(401); // range 800 - 1200
         return new Spell(name, dtype, dnum, accuracy, type);
     }
 
@@ -52,30 +52,66 @@ public final class GameTool {
         int mana = 20 + randgen.nextInt(50);
         Weapon wep = GameTool.createWeapon();
         Spell spell = GameTool.createSpell();
-        int defense = 500 + randgen.nextInt(500);
+        int defense = 300 + randgen.nextInt(500);
         return new Enemy(name, wep, spell, mana, health, action_speed, SpellWeakness, MeleeWeakness, defense);
     }
 
     public static void Battle(Character player, Enemy enemy){
-        playerTurn(player,enemy);
-        enemyTurn(player,enemy);
+        showBattleStatus(player, enemy);
+        while (player.checkVitals() && enemy.checkVitals()){
+            playerTurn(player,enemy);
+            if (!enemy.checkVitals()) break;
+            showBattleStatus(player, enemy);
+            enemyTurn(player,enemy);
+            showBattleStatus(player, enemy);
+        }
+    }
+
+    public static void showBattleStatus(Character player, Enemy enemy){
+        System.out.println(player);
+        System.out.println(enemy);
     }
 
     public static void playerTurn(Character player, Enemy enemy){
-        System.out.println("What would you like to do for your turn action? Type the number of the action");
-        System.out.println("1 - Attack with current weapon " + player.getEquippedWeapon().toString());
-        System.out.println("2 - Cast current spell " + player.getEquippedSpell().toString());
-        System.out.println("3 - Use an item ");
-        System.out.println("4 - Change Current Weapon (Does not cost turn action)");
-        System.out.println("5 - Change Current Spell (Does not cost turn action)");
-
-        int choice = kb.nextInt();
-        switch (choice){
-            case 1: player.attack(enemy);
-            case 2: player.castSpell(enemy);
-            //case 3: player.useItem()
-            case 4: player.swapWeapon();
-            case 5: player.swapSpell();
+        boolean flag = false;    //used action flag
+        while (!flag){
+            System.out.println("What would you like to do for your turn action? Type the number of the action");
+            System.out.println("1 - Attack with current weapon " + player.getEquippedWeapon().toString());
+            System.out.println("2 - Cast current spell " + player.getEquippedSpell().toString());
+            System.out.println("3 - Use an item ");
+            System.out.println("4 - Change Current Weapon (Does not cost turn action)");
+            System.out.println("5 - Change Current Spell (Does not cost turn action)");
+            System.out.println("6 - Check enemy weaknesses");
+            int choice = kb.nextInt();
+            switch (choice){
+                case 1: player.attack(enemy);
+                        flag = true;
+                        break;
+                case 2: player.castSpell(enemy);
+                        flag = true;
+                        break;
+                //case 3: player.useItem()
+                        // flag = true;
+                        // break;
+                case 4: player.changeWeapon();
+                        break;
+                case 5: player.changeSpell();
+                        break;
+                case 6: enemy.showWeakness();
+                        flag = true;
+                        break;
+            }
         }
+    }
+
+    public static void enemyTurn(Character player, Enemy enemy){
+        int i = randgen.nextInt(2);
+        switch (i){
+            case 0: enemy.attack(player);
+                    break;
+            case 1: enemy.castSpell(player);
+                    break;
+        }
+
     }
 }
