@@ -17,7 +17,7 @@ public class Character extends Entity {
     private int lvl;
     private ArrayList<Spell> spellbook = new ArrayList<Spell>();
     private ArrayList<Weapon> arsenal = new ArrayList<Weapon>();
-    //private ArrayList<Item> backpack;
+    private ArrayList<Item> backpack = new ArrayList<Item>();
 
     public Scanner kb = new Scanner(System.in);
 
@@ -58,6 +58,10 @@ public class Character extends Entity {
         this.spellbook.add(spell);
     }
 
+    public void addItem(Item item){
+        this.backpack.add(item);
+    }
+
     public void attack(Enemy target){
         int DMG = this.getEquippedWeapon().attack(target.getDefense(), target.getWeaponTypeWeakness());
         System.out.printf("\nYou dealt %d damage with %s!\n\n", DMG, this.getEquippedWeapon().getName());
@@ -77,12 +81,19 @@ public class Character extends Entity {
             i++;
         }
     }
-
     
     public void showSpellbook(){
         int i=0; //need to show index for player input
         for (Spell tempSpell : this.spellbook){
             System.out.println(i+ " - " +tempSpell);
+            i++;
+        }
+    }
+
+    public void showBackpack(){
+        int i=0; //need to show index for player input
+        for (Item tempItem : this.backpack){
+            System.out.println(i+ " - " +tempItem);
             i++;
         }
     }
@@ -106,4 +117,31 @@ public class Character extends Entity {
         }
         this.setSpell(this.spellbook.get(i));
     }
+
+    public void removeItem(Item item){    // removes item from the backpack
+        this.backpack.remove(item);
+    }
+
+    public void checkItemCharges(Item item){
+        int charges = item.getCharges();
+        if (charges <= 0){
+            this.removeItem(item);
+        }
+    }
+
+    public void useItem(){
+        this.showBackpack();
+        int i = -1;
+        while (i<0 || i>=this.backpack.size()){
+            System.out.println("Type the number of the item you would like to use to then press enter");
+            i = kb.nextInt();
+        }
+        this.use(this.backpack.get(i));
+    }
+
+    public void use(Item item){
+        item.use(this);
+        this.checkItemCharges(item);
+    }
+
 }

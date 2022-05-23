@@ -8,7 +8,7 @@ public abstract class Entity {
     protected int max_health;
     protected int current_health;
     protected int current_mana;
-    protected int action_speed; // 1 is normal, 2 means two actions before enemy 
+    protected int action_speed; // 1 is normal, 2 means two actions per turn
     protected boolean alive;
     protected int defense;
 
@@ -98,7 +98,9 @@ public abstract class Entity {
     public void heal(int heal_val){
         if (heal_val+this.getHealth()<this.getMaxHealth()){     // check we dont exceed max
             this.setHealth(heal_val+this.getHealth());
+            System.out.println("\n"+this.getName() + " healed for " + heal_val + " health\n");
         }else{
+            System.out.println("\n"+this.getName() + " healed for " + (this.getMaxHealth()-this.getHealth()) + " health\n");
             this.setHealth(this.getMaxHealth());                // if we hit max, heal to max
         }
     }
@@ -106,7 +108,9 @@ public abstract class Entity {
     public void restoreMana(int restore_val){                   //same function as heal
         if (restore_val+this.getMana()<this.getMaxMana()){
             this.setMana(restore_val+this.getMana());
+            System.out.println("\n"+this.getName() + " restored " + restore_val + " mana\n");
         }else{
+            System.out.println("\n"+this.getName() + " restored " + (this.getMaxMana()-this.getMana()) + " mana\n");
             this.setMana(this.getMaxMana());
         }
     }

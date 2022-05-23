@@ -33,7 +33,7 @@ public class Enemy extends Entity {
     public void showWeakness(){
         System.out.println("\nMelee weakness : "+this.getWeaponTypeWeakness());
         System.out.println("Spell weakness : "+this.getSpellTypeWeakness());
-        System.out.println("Defense : " + this.getDefense());
+        System.out.println("Defense : " + this.getDefense()+"\n");
     }
 
     public void attack(Character target){

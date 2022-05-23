@@ -56,14 +56,22 @@ public final class GameTool {
         return new Enemy(name, wep, spell, mana, health, action_speed, SpellWeakness, MeleeWeakness, defense);
     }
 
-    public static void Battle(Character player, Enemy enemy){
+    public static void battle(Character player, Enemy enemy){
         showBattleStatus(player, enemy);
+        int turn = 0;
         while (player.checkVitals() && enemy.checkVitals()){
-            playerTurn(player,enemy);
-            if (!enemy.checkVitals()) break;
-            showBattleStatus(player, enemy);
-            enemyTurn(player,enemy);
-            showBattleStatus(player, enemy);
+            turn++;
+            System.out.println("Turn "+ turn + "\n");
+            for (int i = 0; i < player.getActionSpeed(); i++){ //action speed loop (action speed is number of actions)
+                System.out.println(player.name+" - " +(player.getActionSpeed()-(i)) + " actions remaining");
+                playerTurn(player,enemy);
+                if (!enemy.checkVitals()) break;
+                showBattleStatus(player, enemy);
+            }
+            for (int i = 0; i< enemy.getActionSpeed(); i++){
+                enemyTurn(player,enemy);
+                showBattleStatus(player, enemy);
+            }
         }
     }
 
@@ -90,9 +98,9 @@ public final class GameTool {
                 case 2: player.castSpell(enemy);
                         flag = true;
                         break;
-                //case 3: player.useItem()
-                        // flag = true;
-                        // break;
+                case 3: player.useItem();
+                        flag = true;
+                        break;
                 case 4: player.changeWeapon();
                         break;
                 case 5: player.changeSpell();
@@ -100,12 +108,15 @@ public final class GameTool {
                 case 6: enemy.showWeakness();
                         flag = true;
                         break;
+                        
             }
         }
+        System.out.println("______________________________________________________________________");
     }
 
     public static void enemyTurn(Character player, Enemy enemy){
         int i = randgen.nextInt(2);
+        System.out.println("______________________________________________________________________");
         switch (i){
             case 0: enemy.attack(player);
                     break;
