@@ -124,7 +124,7 @@ public abstract class Entity {
 
     public void killEntity(){
         this.alive = false;
-        System.out.printf("\n%s has been slain\n",this.getName());
+        System.out.printf("\n%s has been slain!\n",this.getName());
     }
 
 }

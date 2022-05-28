@@ -55,6 +55,10 @@ public class Spell {
     public String getName(){
         return this.name;
     }
+
+    public String toStringShort(){
+        return this.name+" ("+this.getDiceNum()+"d"+this.getDiceType()+" "+this.getType()+")";
+    }
     
     public String toString(){
         return (this.getName() + " , uses " + this.getDiceNum() + "d" + this.getDiceType() +"(s) with type " + this.getType() + " and an accuracy of " + this.getAccuracy());
@@ -128,11 +132,4 @@ public class Spell {
         return dmg;
     }
 
-    // public static void main(String[] args) {
-    //     Spell fireball = new Spell("Fireball" , SpellType.WATER, 1 , 8, 1000);
-    //     for (int i = 0; i<10; i++){
-    //         System.out.println(fireball.attack(1000, SpellType.WATER));
-    //     }
-        
-    // }
 }

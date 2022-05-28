@@ -15,6 +15,9 @@ import BasicRPG.Weapon.MeleeType;
 
 public class Character extends Entity {
     private int lvl;
+    private int exp; //current experience
+    private int reqExp; //required exp for next level
+    private boolean actionUsed; //will track when a turn is done
     private ArrayList<Spell> spellbook = new ArrayList<Spell>();
     private ArrayList<Weapon> arsenal = new ArrayList<Weapon>();
     private ArrayList<Item> backpack = new ArrayList<Item>();
@@ -23,11 +26,13 @@ public class Character extends Entity {
 
     public Character(String name, int max_mana, int max_health, int action_speed, int lvl, int defense){
         super(name, max_mana, max_health, action_speed, defense);
-        this.lvl = lvl;
+        this.setLVL(lvl);
         this.arsenal.add(new Weapon("Stick", 6, 1, 600, MeleeType.BLUNT));
         this.spellbook.add(new Spell("Fire Bolt", 8, 1, 500, SpellType.FIRE));
         this.equipped_weapon = this.arsenal.get(0);
         this.equipped_spell = this.spellbook.get(0);
+        this.actionUsed = false;
+        this.updateReqExp();
     }
     
     public int getLVL(){
@@ -36,18 +41,66 @@ public class Character extends Entity {
 
     public void setLVL(int lvl){
         this.lvl = lvl;
+        this.setMaxHealth(this.calcMaxHP());
+        this.setHealth(this.getMaxHealth()); //heal to full
     }
 
     public String toString(){
-        return (this.getName() + ": \n" + "Health: " + this.getHealth()+"/"+this.getMaxHealth() + "\nWeapon: " + this.getEquippedWeapon().toString() + "\nSpell: " + this.getEquippedSpell().toString()+"\n");
+        return (this.getName() + " - LVL " +this.getLVL()+" (" + this.getExp()+"/"+this.getReqExp()+" EXP) : \n" + "Health: " + this.getHealth()+"/"+this.getMaxHealth() + 
+        "\nWeapon: " + this.getEquippedWeapon().toString() + "\nSpell: " + this.getEquippedSpell().toString());
+    }
+
+    public void consumeAction(){
+        this.actionUsed = true;
+    }
+
+    public void restoreAction(){
+        this.actionUsed = false;
+    }
+
+    public boolean getActionStatus(){
+        return this.actionUsed;
     }
 
     public void lvlUP(){
-        this.setLVL(this.getLVL()+1); 
+        this.setLVL(this.getLVL()+1);
+        System.out.println("Level Up! "+this.getName()+" is now LVL "+this.getLVL());
+        this.exp = 0; 
+    }
+
+    public int getExp(){
+        return this.exp;
+    }
+
+    public int getReqExp(){
+        return this.reqExp;
+    }
+
+    public void setExp(int newExp){
+        this.exp = newExp;
+    }
+
+    public void setReqExp(int reqExp){
+        this.reqExp = reqExp;
+    }
+
+    public void addExp(int expGained){
+        int newTotal = (this.getExp() + expGained);
+        if (this.getReqExp()-newTotal>=0){
+            this.lvlUP();
+            this.setExp(this.getReqExp()-newTotal);
+        }else{
+            this.setExp(newTotal);
+        }
+    }
+
+    public void updateReqExp(){
+        int formula = 100+(int)Math.pow((double)(this.getLVL()-1), 2)*10; //formula to get experience required for new level
+        this.setReqExp(formula);
     }
 
     public int calcMaxHP(){
-        return 100 + this.getLVL()*50;     // Make HP equal to 100 + 50 * lvl
+        return 20 + this.getLVL()*20;     // Make HP equal to 50 + 50 * lvl
     }
 
     public void addWeapon(Weapon wep){
@@ -64,14 +117,20 @@ public class Character extends Entity {
 
     public void attack(Enemy target){
         int DMG = this.getEquippedWeapon().attack(target.getDefense(), target.getWeaponTypeWeakness());
-        System.out.printf("\nYou dealt %d damage with %s!\n\n", DMG, this.getEquippedWeapon().getName());
-        target.takeDMG(DMG);
+        if (DMG>0){
+            System.out.printf("You dealt %d damage with %s!\n", DMG, this.getEquippedWeapon().getName());
+            target.takeDMG(DMG);
+        }else System.out.println("You missed!");
+        this.consumeAction();
     }
 
     public void castSpell(Enemy target){
         int DMG = this.getEquippedSpell().castSpell(target.getDefense(), target.getSpellTypeWeakness());
-        System.out.printf("\nYou dealt %d damage with %s!\n\n", DMG, this.getEquippedSpell().getName());
-        target.takeDMG(DMG);
+        if (DMG>0){
+            System.out.printf("You dealt %d damage with %s!\n", DMG, this.getEquippedSpell().getName());
+            target.takeDMG(DMG);
+        }else System.out.println("You missed!");
+        this.consumeAction();
     }
 
     public void showArsenal(){
@@ -100,22 +159,27 @@ public class Character extends Entity {
 
     public void changeWeapon(){
         this.showArsenal();
-        int i = -1;
-        while (i<0 || i>=this.arsenal.size()){
-            System.out.println("Type the number of the weapon you would like to switch to then press enter");
+        int i = -2;
+        while (i<-1 || i>=this.arsenal.size()){
+            System.out.println("Type the number of the weapon you would like to switch to then press enter\nType -1 and hit enter to perform a different action");
             i = kb.nextInt();
         }
-        this.setWeapon(this.arsenal.get(i));
+        if (i>=0){
+            this.setWeapon(this.arsenal.get(i));
+        }
     }
 
     public void changeSpell(){
         this.showSpellbook();
-        int i = -1;
-        while (i<0 || i>=this.spellbook.size()){
-            System.out.println("Type the number of the spell you would like to switch to then press enter");
+        int i = -2;
+        while (i<-1 || i>=this.spellbook.size()){
+            System.out.println("Type the number of the spell you would like to switch to then press enter\nType -1 and hit enter to perform a different action");
             i = kb.nextInt();
         }
-        this.setSpell(this.spellbook.get(i));
+        if (i>=0){
+            this.setSpell(this.spellbook.get(i));
+        }
+        
     }
 
     public void removeItem(Item item){    // removes item from the backpack
@@ -131,12 +195,15 @@ public class Character extends Entity {
 
     public void useItem(){
         this.showBackpack();
-        int i = -1;
-        while (i<0 || i>=this.backpack.size()){
-            System.out.println("Type the number of the item you would like to use to then press enter");
+        int i = -2;
+        while (i<-1 || i>=this.backpack.size()){
+            System.out.println("Type the number of the item you would like to use to then press enter\nType -1 and hit enter to perform a different action");
             i = kb.nextInt();
         }
-        this.use(this.backpack.get(i));
+        if (i>=0){
+            this.use(this.backpack.get(i));
+        }
+        
     }
 
     public void use(Item item){

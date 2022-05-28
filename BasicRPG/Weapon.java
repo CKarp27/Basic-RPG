@@ -54,6 +54,14 @@ public class Weapon {
     public String getName(){
         return this.name;
     }
+
+    public String diceString(){
+        return this.getDiceNum()+"d"+this.getDiceType();
+    }
+
+    public String toStringShort(){
+        return this.name+" ("+this.getDiceNum()+"d"+this.getDiceType()+" "+this.getType()+")";
+    }
     
     public String toString(){
         return (this.getName() + " , uses " + this.getDiceNum() + "d" + this.getDiceType() +"(s) with type " + this.getType() + " and an accuracy of " + this.getAccuracy());
