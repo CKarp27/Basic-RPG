@@ -13,10 +13,10 @@ public class Enemy extends Entity {
     MeleeType weaponTypeWeakness;
     int rewardExp;
 
-    public Enemy(String name, Weapon equipped_weapon, Spell equipped_spell, int max_mana, int max_health, int action_speed, SpellType spelltype, MeleeType weapontype, int defense, int rewardExp){
-        super(name, max_mana, max_health, action_speed, defense);
-        this.equipped_weapon = equipped_weapon;
-        this.equipped_spell = equipped_spell;
+    public Enemy(String name, Weapon equippedWeapon, Spell equippedSpell, int maxMana, int maxHealth, int action_speed, SpellType spelltype, MeleeType weapontype, int defense, int rewardExp){
+        super(name, maxMana, maxHealth, action_speed, defense);
+        this.equippedWeapon = equippedWeapon;
+        this.equippedSpell = equippedSpell;
         this.spellTypeWeakness = spelltype;
         this.weaponTypeWeakness = weapontype;
         this.rewardExp = rewardExp;

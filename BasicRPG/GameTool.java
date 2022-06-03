@@ -49,7 +49,7 @@ public final class GameTool {
         MeleeType MeleeWeakness = MeleeType.getRandomType();
         String name = enemy_names[randgen.nextInt(enemy_names.length)];
         int action_speed = 1;                                                   // change later if more speeds wanted
-        int health = 20 + randgen.nextInt(20);
+        int health = 30 + randgen.nextInt(50);
         int mana = 20 + randgen.nextInt(20);
         Weapon wep = GameTool.createWeapon();
         Spell spell = GameTool.createSpell();

@@ -2,23 +2,19 @@ package BasicRPG;
 
 public abstract class Entity {
     protected String name;
-    protected Weapon equipped_weapon;
-    protected Spell equipped_spell;
-    protected int max_mana;
-    protected int max_health;
-    protected int current_health;
-    protected int current_mana;
-    protected int action_speed; // 1 is normal, 2 means two actions per turn
+    protected Weapon equippedWeapon;
+    protected Spell equippedSpell;
+    protected int maxMana, maxHealth, currentHealth, currentMana, defense;
+    protected int actionSpeed; // 1 is normal, 2 means two actions per turn
     protected boolean alive;
-    protected int defense;
 
-    public Entity(String name, int max_mana, int max_health, int action_speed, int defense){
+    public Entity(String name, int maxMana, int maxHealth, int actionSpeed, int defense){
         this.name = name;
-        this.max_mana = max_mana;
-        this.max_health = max_health;
-        this.current_health = max_health;
-        this.current_mana = max_mana;
-        this.action_speed = action_speed;
+        this.maxMana = maxMana;
+        this.maxHealth = maxHealth;
+        this.currentHealth = maxHealth;
+        this.currentMana = maxMana;
+        this.actionSpeed = actionSpeed;
         this.defense = defense;
         this.alive = true;
     }
@@ -28,31 +24,31 @@ public abstract class Entity {
     }
 
     public Weapon getEquippedWeapon(){
-        return this.equipped_weapon;
+        return this.equippedWeapon;
     }
 
     public Spell getEquippedSpell(){
-        return this.equipped_spell;
+        return this.equippedSpell;
     }
 
     public int getActionSpeed(){
-        return this.action_speed;
+        return this.actionSpeed;
     }
 
     public int getMaxMana(){
-        return this.max_mana;
+        return this.maxMana;
     }
 
     public int getMaxHealth(){
-        return this.max_health;
+        return this.maxHealth;
     }
 
     public int getHealth(){
-        return this.current_health;
+        return this.currentHealth;
     }
 
     public int getMana(){
-        return this.current_mana;
+        return this.currentMana;
     }
 
     public int getDefense(){
@@ -68,27 +64,27 @@ public abstract class Entity {
     }
 
     public void setMaxHealth(int max_hp){
-        this.max_health = max_hp;
+        this.maxHealth = max_hp;
     }
 
-    public void setMaxMana(int max_mana){
-        this.max_mana = max_mana;
+    public void setMaxMana(int maxMana){
+        this.maxMana = maxMana;
     }
 
     public void setWeapon(Weapon wep){
-        this.equipped_weapon = wep;
+        this.equippedWeapon = wep;
     }
 
     public void setSpell(Spell spell){
-        this.equipped_spell = spell;
+        this.equippedSpell = spell;
     }
 
     public void setHealth(int health){
-        this.current_health = health;
+        this.currentHealth = health;
     }
 
     public void setMana(int mana){
-        this.current_mana = mana;
+        this.currentMana = mana;
     }
 
     public void setDefense(int defense){

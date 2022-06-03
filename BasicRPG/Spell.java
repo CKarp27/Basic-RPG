@@ -26,6 +26,7 @@ public class Spell {
     int diceNum; //(6 for d6, 8 for d8 etc.)
     int diceType;
     int accuracy;
+    int manaCost;
     
 
     public Spell(String name, int diceType, int diceNum, int accuracy, SpellType type){ //Constructor
@@ -34,12 +35,13 @@ public class Spell {
         this.diceNum = diceNum;
         this.diceType = diceType;
         this.accuracy = accuracy;
+        this.calcManaCost();
     }
 
     public SpellType getType(){
         return this.type;
     }
-
+    
     public int getDiceNum(){
         return this.diceNum;
     }
@@ -56,14 +58,22 @@ public class Spell {
         return this.name;
     }
 
+    public int getManaCost(){
+        return this.manaCost;
+    }
+
     public String toStringShort(){
-        return this.name+" ("+this.getDiceNum()+"d"+this.getDiceType()+" "+this.getType()+")";
+        return this.name+" ("+this.getDiceNum()+"d"+this.getDiceType()+" "+this.getType()+")"+"("+this.getManaCost()+" mana cost)";
     }
     
     public String toString(){
-        return (this.getName() + " , uses " + this.getDiceNum() + "d" + this.getDiceType() +"(s) with type " + this.getType() + " and an accuracy of " + this.getAccuracy());
+        return (this.getName() + " (costs "+this.getManaCost()+" mana), uses " + this.getDiceNum() + "d" + this.getDiceType() +"(s) with type " + this.getType() + " and an accuracy of " + this.getAccuracy());
     }
     
+    public void calcManaCost(){
+        this.manaCost = (int) Math.sqrt(4*(double)this.diceNum*(double)this.diceType);
+    }
+
     public int rollDMG(){
         int sum = 0;
         for (int i=0; i<this.getDiceNum(); i++){

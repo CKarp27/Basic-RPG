@@ -14,9 +14,7 @@ import BasicRPG.Spell.SpellType;
 import BasicRPG.Weapon.MeleeType;
 
 public class Character extends Entity {
-    private int lvl;
-    private int exp; //current experience
-    private int reqExp; //required exp for next level
+    private int lvl, exp, reqExp; //current experience, exp for next level
     private boolean actionUsed; //will track when a turn is done
     private ArrayList<Spell> spellbook = new ArrayList<Spell>();
     private ArrayList<Weapon> arsenal = new ArrayList<Weapon>();
@@ -24,13 +22,13 @@ public class Character extends Entity {
 
     public Scanner kb = new Scanner(System.in);
 
-    public Character(String name, int max_mana, int max_health, int action_speed, int lvl, int defense){
-        super(name, max_mana, max_health, action_speed, defense);
+    public Character(String name, int maxMana, int actionSpeed, int lvl, int defense){
+        super(name, maxMana, 10, actionSpeed, defense);
         this.setLVL(lvl);
         this.arsenal.add(new Weapon("Stick", 6, 1, 600, MeleeType.BLUNT));
         this.spellbook.add(new Spell("Fire Bolt", 8, 1, 500, SpellType.FIRE));
-        this.equipped_weapon = this.arsenal.get(0);
-        this.equipped_spell = this.spellbook.get(0);
+        this.equippedWeapon = this.arsenal.get(0);
+        this.equippedSpell = this.spellbook.get(0);
         this.actionUsed = false;
         this.updateReqExp();
     }
@@ -47,7 +45,7 @@ public class Character extends Entity {
 
     public String toString(){
         return (this.getName() + " - LVL " +this.getLVL()+" (" + this.getExp()+"/"+this.getReqExp()+" EXP) : \n" + "Health: " + this.getHealth()+"/"+this.getMaxHealth() + 
-        "\nWeapon: " + this.getEquippedWeapon().toString() + "\nSpell: " + this.getEquippedSpell().toString());
+        "\t\tMana: " + this.getMana()+ "/"+this.getMaxMana()+"\nWeapon: " + this.getEquippedWeapon().toString() + "\nSpell: " + this.getEquippedSpell().toString());
     }
 
     public void consumeAction(){
@@ -125,12 +123,17 @@ public class Character extends Entity {
     }
 
     public void castSpell(Enemy target){
-        int DMG = this.getEquippedSpell().castSpell(target.getDefense(), target.getSpellTypeWeakness());
-        if (DMG>0){
-            System.out.printf("You dealt %d damage with %s!\n", DMG, this.getEquippedSpell().getName());
-            target.takeDMG(DMG);
-        }else System.out.println("You missed!");
-        this.consumeAction();
+        if(this.getMana()-this.getEquippedSpell().getManaCost()<0){
+            System.out.println("Not enough mana for this spell");
+        }else{
+            int DMG = this.getEquippedSpell().castSpell(target.getDefense(), target.getSpellTypeWeakness());
+            if (DMG>0){
+                System.out.printf("You dealt %d damage with %s!\n", DMG, this.getEquippedSpell().getName());
+                target.takeDMG(DMG);
+            }else System.out.println("You missed!");
+            this.consumeAction();
+            this.setMana(this.getMana()-this.equippedSpell.getManaCost());
+        }
     }
 
     public void showArsenal(){
@@ -209,6 +212,7 @@ public class Character extends Entity {
     public void use(Item item){
         item.use(this);
         this.checkItemCharges(item);
+        this.consumeAction();
     }
 
 }

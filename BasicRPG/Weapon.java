@@ -113,7 +113,7 @@ public class Weapon {
         int hit = this.rollHit(enemyDef);
         int dmg = this.rollDMG()*hit*mod;
         if (hit == 2){
-            dmg = mod*hit*this.getDiceNum()*this.getDiceType();
+            dmg = mod*hit*this.rollDMG();
         }
         return dmg;
     }
@@ -123,7 +123,7 @@ public class Weapon {
         int hit = this.rollHit(playerDef);
         int dmg = this.rollDMG()*hit;
         if (hit == 2){
-            dmg = hit*this.getDiceNum()*this.getDiceType();
+            dmg = hit*this.rollDMG();
         }
         return dmg;
     }
