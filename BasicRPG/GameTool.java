@@ -8,14 +8,16 @@
 package BasicRPG;
 import BasicRPG.Spell.SpellType;
 import BasicRPG.Weapon.MeleeType;
+
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
 public final class GameTool {
     static Random randgen = new Random();
     static Scanner kb = new Scanner(System.in);
-    final static String[] enemy_names = {"Bugbear","Orc","Goblin"};
-    final static String[] weapon_names = {"Axe","Spear","Sword","Dagger","Hammer","Greatsword"};         // change to 2d array with catagories by weapon type, same for spells
+    final static String[] enemy_names = {"Bugbear", "Orc", "Goblin", "Troll", "Ghoul", "Corrupted Paladin"};
+    final static String[] weapon_names = {"Axe","Spear","Sword","Dagger","Hammer","Greatsword"};         // in future, change to 2d array with catagories by weapon type, same for spells
     final static String[] spell_names = {"Fireball", "Lightning Strike", "Hail", "Magic Missile"};
 
 
@@ -28,7 +30,7 @@ public final class GameTool {
         }
         String name = weapon_names[randgen.nextInt(weapon_names.length)];
         MeleeType type = MeleeType.getRandomType();
-        int accuracy = 400 + randgen.nextInt(401); // range 800 - 1200
+        int accuracy = 400 + randgen.nextInt(401); // range 400 - 800
         return new Weapon(name, dtype, dnum, accuracy, type);
     }
 
@@ -67,10 +69,10 @@ public final class GameTool {
             for (int i = 0; i < player.getActionSpeed(); i++){ //action speed loop (action speed is number of actions)
                 System.out.println(player.name+" - " +(player.getActionSpeed()-(i)) + " actions remaining");
                 playerTurn(player,enemy);
-                if (!enemy.checkVitals()) break;
+                if (!enemy.checkVitals()) break; //prevents excessive printing
                 showBattleStatus(player, enemy);
             }
-            if (!enemy.checkVitals()) break;
+            if (!enemy.checkVitals()) break; //prevents excessive printing
             for (int i = 0; i< enemy.getActionSpeed(); i++){
                 enemyTurn(player,enemy);
                 showBattleStatus(player, enemy);
@@ -91,34 +93,43 @@ public final class GameTool {
     public static void playerTurn(Character player, Enemy enemy){
         player.restoreAction();    //used action flag
         while (!player.getActionStatus()){
-            System.out.println("\nWhat would you like to do for your turn action? Type the number of the action");
+            System.out.println("\nWhat would you like to do for your turn action? Enter the number of the action");
             System.out.println("1 - Attack with current weapon - " + player.getEquippedWeapon().toStringShort()+" probability to hit: "+player.getEquippedWeapon().calcHitProb(enemy.getDefense())+"%");
             System.out.println("2 - Cast current spell - " + player.getEquippedSpell().toStringShort()+ " probability to hit: "+player.getEquippedSpell().calcHitProb(enemy.getDefense())+"%");
             System.out.println("3 - Use an item ");
             System.out.println("4 - Change Current Weapon (Does not cost turn action)");
             System.out.println("5 - Change Current Spell (Does not cost turn action)");
             System.out.println("6 - Check enemy weaknesses");
-            int choice = kb.nextInt();
-            System.out.println("");
-            switch (choice){
-                case 1: player.attack(enemy);
-                        break;
-                case 2: player.castSpell(enemy);
-                        break;
-                case 3: player.useItem();
-                        break;
-                case 4: player.changeWeapon();
-                        break;
-                case 5: player.changeSpell();
-                        break;
-                case 6: enemy.showWeakness();
-                        player.consumeAction(); //have to flag this manually since it's an enemy method
-                        break;
+            
+            boolean done = false;
+            while (!done){
+                try{
+                    System.out.println("");
+                    int choice = kb.nextInt();
+                    switch (choice){
+                        case 1: player.attack(enemy);
+                                break;
+                        case 2: player.castSpell(enemy);
+                                break;
+                        case 3: player.useItem();
+                                break;
+                        case 4: player.changeWeapon();
+                                break;
+                        case 5: player.changeSpell();
+                                break;
+                        case 6: enemy.showWeakness();
+                                player.consumeAction(); //have to flag this manually since it's an enemy method
+                                break;
+                    }
+                    done = true;
+                }catch(InputMismatchException ex){
+                    System.out.println("Ensure you are using a valid integer");
+                }
             }
         }
     }
 
-    public static void enemyTurn(Character player, Enemy enemy){
+    public static void enemyTurn(Character player, Enemy enemy){ //very simplistic enemy AI, to be improved with future updates
         int i = randgen.nextInt(2);
         switch (i){
             case 0: enemy.attack(player);

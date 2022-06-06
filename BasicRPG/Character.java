@@ -8,6 +8,7 @@
 
 package BasicRPG;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import BasicRPG.Spell.SpellType;
@@ -33,6 +34,18 @@ public class Character extends Entity {
         this.updateReqExp();
     }
     
+    public ArrayList<Spell> getSpellBook(){
+        return spellbook;
+    }
+
+    public ArrayList<Weapon> getArsenal(){
+        return arsenal;
+    }
+
+    public ArrayList<Item> getBackpack(){
+        return backpack;
+    }
+
     public int getLVL(){
         return this.lvl;
     }
@@ -41,6 +54,7 @@ public class Character extends Entity {
         this.lvl = lvl;
         this.setMaxHealth(this.calcMaxHP());
         this.setHealth(this.getMaxHealth()); //heal to full
+        this.setMana((this.getMaxMana()));
     }
 
     public String toString(){
@@ -160,7 +174,7 @@ public class Character extends Entity {
         }
     }
 
-    public void changeWeapon(){
+    public void changeWeapon() throws InputMismatchException{
         this.showArsenal();
         int i = -2;
         while (i<-1 || i>=this.arsenal.size()){
@@ -172,7 +186,7 @@ public class Character extends Entity {
         }
     }
 
-    public void changeSpell(){
+    public void changeSpell() throws InputMismatchException{
         this.showSpellbook();
         int i = -2;
         while (i<-1 || i>=this.spellbook.size()){
@@ -196,7 +210,7 @@ public class Character extends Entity {
         }
     }
 
-    public void useItem(){
+    public void useItem() throws InputMismatchException{
         this.showBackpack();
         int i = -2;
         while (i<-1 || i>=this.backpack.size()){
@@ -210,6 +224,7 @@ public class Character extends Entity {
     }
 
     public void use(Item item){
+        System.out.print("\nUsed "+item.getName());
         item.use(this);
         this.checkItemCharges(item);
         this.consumeAction();

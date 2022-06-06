@@ -28,6 +28,10 @@ public abstract class Item {
         return this.charges;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
     public String toString(){
         return (this.name + " "+ this.charges + "/" + this.maxCharges + " uses - Effect: " + this.showEffect());
     }

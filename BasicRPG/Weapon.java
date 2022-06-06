@@ -109,7 +109,6 @@ public class Weapon {
         if (this.getType()==enemyWeakness){                  //check weakness
             mod = 2;
         }
-
         int hit = this.rollHit(enemyDef);
         int dmg = this.rollDMG()*hit*mod;
         if (hit == 2){

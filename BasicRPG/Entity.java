@@ -1,3 +1,9 @@
+/**
+ * Defines an entity for an RPG, a parent class for Character and Enemy that cannot be instantiated 
+ * @author Connor Karpinski
+ * @version 1.0
+ * 
+ */
 package BasicRPG;
 
 public abstract class Entity {
@@ -63,8 +69,8 @@ public abstract class Entity {
         this.name = name;
     }
 
-    public void setMaxHealth(int max_hp){
-        this.maxHealth = max_hp;
+    public void setMaxHealth(int maxHP){
+        this.maxHealth = maxHP;
     }
 
     public void setMaxMana(int maxMana){
@@ -91,20 +97,20 @@ public abstract class Entity {
         this.defense = defense;
     }
 
-    public void heal(int heal_val){
-        if (heal_val+this.getHealth()<this.getMaxHealth()){     // check we dont exceed max
-            this.setHealth(heal_val+this.getHealth());
-            System.out.println("\n"+this.getName() + " healed for " + heal_val + " health\n");
+    public void heal(int healVal){
+        if (healVal+this.getHealth()<this.getMaxHealth()){     // check we dont exceed max
+            this.setHealth(healVal+this.getHealth());
+            System.out.println("\n"+this.getName() + " healed for " + healVal + " health\n");
         }else{
             System.out.println("\n"+this.getName() + " healed for " + (this.getMaxHealth()-this.getHealth()) + " health\n");
             this.setHealth(this.getMaxHealth());                // if we hit max, heal to max
         }
     }
 
-    public void restoreMana(int restore_val){                   //same function as heal
-        if (restore_val+this.getMana()<this.getMaxMana()){
-            this.setMana(restore_val+this.getMana());
-            System.out.println("\n"+this.getName() + " restored " + restore_val + " mana\n");
+    public void restoreMana(int restoreVal){                   //same function as heal
+        if (restoreVal+this.getMana()<this.getMaxMana()){
+            this.setMana(restoreVal+this.getMana());
+            System.out.println("\n"+this.getName() + " restored " + restoreVal + " mana with \n");
         }else{
             System.out.println("\n"+this.getName() + " restored " + (this.getMaxMana()-this.getMana()) + " mana\n");
             this.setMana(this.getMaxMana());
